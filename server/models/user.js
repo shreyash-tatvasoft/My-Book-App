@@ -5,7 +5,16 @@ const userSchema = new mongoose.Schema({
     name: { type : String, required: true, trim: true},
     email: { type : String, required: true, trim: true},
     password: { type : String, required: true, trim: true},
-    term: { type : Boolean, required: true}
+    term: { type : Boolean, required: true},
+    role: { type: String, enum: ["customer", "admin"], default: "customer" },
+    borrowedBooks: [
+        {
+            bookId: { type: mongoose.Schema.Types.ObjectId, ref: "books" },
+            borrowDate: { type: Date },
+            dueDate: { type: Date }
+        }
+    ],
+    wishlist : [{ type : mongoose.Schema.Types.ObjectId, ref: "books"}]
 })
 
 // Create Model

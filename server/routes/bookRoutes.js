@@ -15,6 +15,7 @@ router.use("/add", upload.single("image"))
 
 // Public Routes
 router.get("/list", BookController.getBooksList)
+router.get("/list/:id", BookController.getBookDataById)
 
 // Private Routes
 router.post('/add', BookController.addNewBook)

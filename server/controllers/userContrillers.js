@@ -1,10 +1,11 @@
 import userModel from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import bookModel from "../models/book.js";
 
 class UserController {
   static userRegistration = async (req, res) => {
-    const { name, email, password, confirm_password, tc } = req.body;
+    const { name, email, password, confirm_password, tc, role } = req.body;
 
     const user = await userModel.findOne({ email: email });
     if (user) {
@@ -20,6 +21,7 @@ class UserController {
               email: email,
               password: hashPassword,
               term: tc,
+              role
             });
 
             await doc.save();
@@ -150,6 +152,72 @@ class UserController {
   static loggedUserInfo = async (req,res) => {
     try {
       res.status(200).send({"type": "success" ,"data" : req.user})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static getAllWishlist = async (req,res) => {
+    try {
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static addToWishlist = async (req,res) => {
+    try {
+      const { bookId, userId } = req.body;
+
+      const user = await userModel.findById(userId)
+
+      if(!user) {
+        return res.status(200).send({"type": "error" ,"message" : "User not found"})
+      }
+
+      const book = await bookModel.findById(bookId);
+      if(!book) {
+        return res.status(200).send({"type": "error" ,"message" : "Book not found"})
+      }
+
+      // Added book to wishlist
+      if (!user.wishlist.includes(bookId)) {
+        user.wishlist.push(bookId);
+        await user.save();
+      }
+
+      return res.status(200).send({"type": "success" ,"message" : "Book added to wishlist"})
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static removeFromWishlist = async (req,res) => {
+    try {
+      const { bookId, userId } = req.body;
+
+      const user = await userModel.findById(userId)
+
+      if(!user) {
+        return res.status(200).send({"type": "error" ,"message" : "User not found"})
+      }
+
+      const book = await bookModel.findById(bookId);
+      if(!book) {
+        return res.status(200).send({"type": "error" ,"message" : "Book not found"})
+      }
+
+      // Removd book from wishlist
+      const bookIndex = user.wishlist.indexOf(bookId);
+      if (bookIndex > -1) {
+        user.wishlist.splice(bookIndex, 1);
+        await user.save();
+      }
+
+      return res.status(200).send({"type": "success" ,"message" : "Book removed from wishlist"})
+
+      
     } catch (error) {
       console.log(error)
     }

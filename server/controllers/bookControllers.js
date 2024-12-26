@@ -1,5 +1,5 @@
+import mongoose from "mongoose"
 import bookModel from "../models/book.js"
-import userModel from "../models/user.js"
 
 class BookController {
     static addNewBook = async (req, res) => {
@@ -15,7 +15,6 @@ class BookController {
                         book_catogory : catogory,
                         book_price : price,
                         book_image : img,
-                        user_id : req.user.id
                     })
 
                     const newBook = await bookInfo.save()
@@ -41,6 +40,23 @@ class BookController {
             } else {
                 res.status(404).send({type: "error", data: [] })
             }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    static getBookDataById = async (req, res) => {
+        try {
+            const bookId = req.params.id
+
+            const data = await bookModel.findById(bookId)
+
+            if(data && data._id) {
+                res.status(200).send({type: "success", data: data })
+            } else {
+                res.status(404).send({type: "error", message : "Invalid Details" })
+            }
+
         } catch (error) {
             console.log(error)
         }

@@ -6,9 +6,8 @@ const bookSchema = new mongoose.Schema({
     auther_name: { type : String, required: true, trim: true},
     book_description: { type : String, required: true, trim: true},
     book_catogory: { type : String, required: true, trim: true},
-    book_price: { type : String, required: true, trim: true},
+    book_price: { type : Number, required: true, trim: true},
     book_image: {type: String, required: true},
-    user_id : { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 })
 
 // Create Model
