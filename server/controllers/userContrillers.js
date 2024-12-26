@@ -159,6 +159,16 @@ class UserController {
 
   static getAllWishlist = async (req,res) => {
     try {
+
+      const userId = req.params.id
+
+      const user = await userModel.findById(userId).populate("wishlist").select("-password");
+
+      if(!user) {
+        return res.status(200).send({"type": "error" ,"message" : "User not found"})
+      }
+
+      return res.status(200).send({"type": "success" ,"data" : user.wishlist})
       
     } catch (error) {
       console.log(error)

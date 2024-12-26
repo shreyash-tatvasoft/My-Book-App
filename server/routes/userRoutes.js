@@ -10,7 +10,7 @@ router.use("/changeUserPassword", checkuserAuth)
 router.use("/userInfo", checkuserAuth)
 router.use("/wishlist/add", checkuserAuth)
 router.use("/wishlist/remove", checkuserAuth)
-router.use("/wishlist/list", checkuserAuth)
+router.use("/wishlist/list/:id", checkuserAuth)
 
 
 
@@ -29,7 +29,7 @@ router.get("/userInfo", UserController.loggedUserInfo)
 
 router.put("/wishlist/add", UserController.addToWishlist)
 router.delete("/wishlist/remove", UserController.removeFromWishlist)
-router.get("/wishlist/list", UserController.getAllWishlist)
+router.get("/wishlist/list/:id", UserController.getAllWishlist)
 
 
 

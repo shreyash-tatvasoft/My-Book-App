@@ -8,7 +8,7 @@ const checkuserAuth = async (req, res, next) => {
         if(token) {
             const { userID } = jwt.verify(token, process.env.JWT_SECRET_KEY)
 
-            req.user = await userModel.findById(userID).select("-password")
+            req.user = await userModel.findById(userID).select("-password").populate("wishlist")
             next()
 
         } else {
