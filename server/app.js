@@ -6,6 +6,7 @@ import connectDB from "./db/connectDB.js";
 import userRoutes from './routes/userRoutes.js'
 import bookRoutes from "./routes/bookRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js"
 
 const app = express();
 const port = process.env.PORT
@@ -27,6 +28,7 @@ connectDB(DATABASE_URL)
 app.use("/api/user", userRoutes)
 app.use("/api/book", bookRoutes)
 app.use("/api/order", orderRoutes)
+app.use("/api/admin", adminRoutes)
 
 app.listen(port, () => {
     console.log(`Server started at ${port}`)

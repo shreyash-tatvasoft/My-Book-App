@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema({
     borrowedBooks: [
         {
             bookId: { type: mongoose.Schema.Types.ObjectId, ref: "books" },
-            borrowDate: { type: Date },
-            dueDate: { type: Date }
+            borrowDate: { type: String, match: /^\d{4}-\d{2}-\d{2}$/  },
+            dueDate: { type: String, match: /^\d{4}-\d{2}-\d{2}$/  }
         }
     ],
     wishlist : [{ type : mongoose.Schema.Types.ObjectId, ref: "books"}]

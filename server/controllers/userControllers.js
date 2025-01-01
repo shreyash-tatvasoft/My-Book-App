@@ -233,6 +233,59 @@ class UserController {
     }
   }
 
+  static borrowBook = async (req, res) => {
+    try {
+      const { borrowedBooks } = req.body;
+
+      const userId = req.user._id
+
+      if (!Array.isArray(borrowedBooks)) {
+        return res.status(400).send({ type: "error", message: "Please enter valid details" });
+      }
+
+      // Extract all bookIds from the request
+      const bookIds = borrowedBooks.map(book => book.bookId);
+
+      // Check if all bookIds exist in the books collection
+      const existingBooks = await bookModel.find({ _id: { $in: bookIds } });
+      const existingBookIds = existingBooks.map(book => book._id.toString());
+
+      // Find invalid bookIds
+      const invalidBooks = bookIds.filter(bookId => !existingBookIds.includes(bookId));
+
+      if (invalidBooks.length > 0) {
+        return res.status(404).send({ type: "error", message: "Books Not Found!" });
+      }
+
+      // Check for books already borrowed by the user
+      const user = await userModel.findById(userId);
+
+      const alreadyBorrowed = user.borrowedBooks
+        .map(book => book.bookId.toString())
+        .filter(bookId => bookIds.includes(bookId));
+
+      if (alreadyBorrowed.length > 0) {
+        return res.status(404).send({ type: "error", message: "Books are already borrowed!" });
+      }
+
+      const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        { $push: { borrowedBooks: { $each: borrowedBooks } } }, // Add multiple entries to the array
+        { new: true } // Return the updated document
+      );
+
+      if (!updatedUser) {
+        return res.status(404).send({ type: "error", message: "user Not Found!" });
+      }
+
+      return res.status(200).send({ "type": "success", "message": "Book Borrowed Successfully", data: updatedUser })
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 }
 
 export default UserController

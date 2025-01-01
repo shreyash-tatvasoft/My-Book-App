@@ -1,5 +1,5 @@
 import express from "express";
-import UserController from "../controllers/userContrillers.js";
+import UserController from "../controllers/userControllers.js";
 import checkuserAuth from "../middlewares/auth-middleware.js";
 
 
@@ -11,6 +11,7 @@ router.use("/userInfo", checkuserAuth)
 router.use("/wishlist/add", checkuserAuth)
 router.use("/wishlist/remove", checkuserAuth)
 router.use("/wishlist/list/:id", checkuserAuth)
+router.use("/borrow/books", checkuserAuth)
 
 
 
@@ -30,6 +31,7 @@ router.get("/userInfo", UserController.loggedUserInfo)
 router.put("/wishlist/add", UserController.addToWishlist)
 router.delete("/wishlist/remove", UserController.removeFromWishlist)
 router.get("/wishlist/list/:id", UserController.getAllWishlist)
+router.put("/borrow/books", UserController.borrowBook)
 
 
 
